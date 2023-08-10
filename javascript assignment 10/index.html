@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Javascript assignment 10</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<style>
+  .lorem{
+    height: 350px !important;
+  }
+</style>
+  <body class="bg-dark">
+  <div class="d-flex container justify-content-between py-4">
+    <div>
+      <input style="width: 600px; border: 2px solid grey" class="d-block text-light rounded-2 p-2 bg-transparent"
+        type="text" placeholder="Enter a PC name" id="pcName" />
+      <input style="width: 600px; border: 2px solid grey" class="d-block text-light my-4 rounded-2 p-2 bg-transparent"
+        type="text" placeholder="Enter a warranty you want" id="pcWarranty" />
+      <input style="width: 600px; border: 2px solid grey" class="d-block text-light my-4 rounded-2 p-2 bg-transparent"
+        type="text" placeholder="Enter the PC model" id="pcModel" />
+      <textarea style="width: 600px" class="border-2 d-block text-light my-4 bg-transparent rounded-2 p-2" ype="text"
+        placeholder="Enter Specifications" rows="8" id="pcDesc"></textarea>
+    </div>
+    <div>
+      <input style="width: 400px; border: 2px solid grey" class="d-block text-light rounded-2 p-2 bg-transparent"
+        type="text" oninput="searchPc()" placeholder="Search" id="searchPc" />
+      <div id="showInput" class="text-light mx-2"></div>
+      <div class="lorem overflow-scroll">
+        <span id="pcsList" class="text-light mx-2"></span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button onclick="onSubmit()" id="submitBtn" class="btn w-100 my-2 btn-outline-light">Submit</button>
+  </div>
+  <script>
+    let pcs = [];
+    let newPc = {}
+function onSubmit() {
+  const pcName = document.getElementById("pcName").value;
+  const pcWarranty = document.getElementById("pcWarranty").value;
+  const pcModel = document.getElementById("pcModel").value;
+  const pcDesc = document.getElementById("pcDesc").value;
+
+  if(pcName === '' || pcWarranty === '' || pcModel === '' || pcDesc === '' ){
+    return document.getElementById('showInput').innerHTML = 'Please fill the empty fields'
+  }
+  if(pcName.length < 2 || pcWarranty.length < 2 || pcModel.length < 2 || pcDesc.length < 10){
+    return document.getElementById('showInput').innerHTML = 'Each field must require atleast 2 characters but specifictions must be 10 characters long'
+  }
+  else{
+      const data = [pcName, pcWarranty, pcModel, pcDesc];
+      document.getElementById("showInput").innerHTML = data;
+  }
+  newPc = {
+    name: pcName,
+    warranty: pcWarranty,
+    model: pcModel,
+    description: pcDesc,
+   }
+  pcs.push(newPc)
+  showInfo(pcs)
+  clearPc()
+}
+function clearPc(){
+  document.getElementById("pcName").value = "";
+    document.getElementById("pcWarranty").value = "";
+    document.getElementById("pcModel").value = "";
+    document.getElementById("pcDesc").value = "";
+  }
+function showInfo(pcsList) {
+  console.log(pcsList);
+  document.getElementById("showInput").innerHTML = "";
+  let pcList = "";
+  window.pcs = pcsList;
+  pcsList.forEach((pc) => {
+    pcList = pcList + '<h1>' + pc.name + '</h1>';
+    pcList = pcList + "<p>" + pc.warranty + "</p>";
+    pcList = pcList + "<p>" + pc.model + "</p>";
+    pcList = pcList + "<p>" + pc.description + "</p>";
+    pcList = pcList + '<button onclick="editPc()" class="btn m-3 btn-info">Edit</button>';
+    pcList = pcList + '<button onclick="deletePc()" class="btn m-3 btn-danger">Delete</button>';
+  });
+  document.getElementById("pcsList").innerHTML = pcList;
+}
+function searchPc(){
+  const searchInput = document.getElementById('searchPc').value;
+  let pcList = '';
+  const pcsList = pcs;
+pcsList.forEach((pc) => {
+    pcList = pcList + '<h1>' + pc.name + '</h1>'
+    pcList = pcList + "<p>" + pc.warranty + "</p>"
+    pcList = pcList + "<p>" + pc.model + "</p>"
+    pcList = pcList + "<p>" + pc.description + "</p>"
+    pcList = pcList + '<button onclick="editPc()" class="btn m-3 btn-info">Edit</button>';
+    pcList = pcList + '<button onclick="deletePc()" class="btn m-3 btn-danger">Delete</button>';
+});
+const filterPcs = pcs.filter((item)=>{
+  return item.name == searchInput
+})
+if(searchInput === ''){
+  return document.getElementById("pcsList").innerHTML = pcList;
+}
+  showInfo(filterPcs);
+  console.log('$$a', filterPcs);
+}
+function deletePc(i) {
+  pcs.splice(i, 1);
+  showInfo(pcs);
+}
+function editPc() {
+  document.getElementById('pcName').value = newPc.name
+  document.getElementById('pcWarranty').value = newPc.warranty
+  document.getElementById('pcModel').value = newPc.model
+  document.getElementById('pcDesc').value = newPc.description
+  document.getElementById('submitBtn').innerHTML = 'Update'
+}
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

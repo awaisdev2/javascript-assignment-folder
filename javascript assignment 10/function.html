@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Assignment</title>
+</head>
+<body style="background-color: darkslategray;">
+    <div style="text-align: center; font-size: 50px; margin-top: 30vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        Open your console
+    </div>
+    <script>
+        function func1(num){
+            num = num + 1 
+            console.log("func1's valus: " + num)
+            func2(num)
+            console.log("func1's valus: " + num)
+        }
+        function func2(num){
+            num = num + 2 
+            console.log("func2's valus: " + num)
+            func3(num)
+            console.log("func2's valus: " + num)
+        } 
+        function func3(num){
+            num = num + 1 
+            console.log("func3's valus: " + num)
+        }
+        func1(5)
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Assignment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body class="bg-dark">
+    <div class="container d-flex justify-content-center my-5 p-5">
+        <button class="btn btn-lg btn-outline-light mx-1" onclick="addFive()">Add array</button>
+        <button class="btn btn-lg btn-outline-light mx-1" onclick="subtractFive()">Subtract array</button>
+        <button class="btn btn-lg btn-outline-light mx-1" onclick="multiplyFive()">Multiply array</button>
+    </div>
+    <div class="container text-light text-center mx-5 ">
+        <div class="fs-2" id="showAnswer"></div>
+    </div>
+    <script>
+        let arrayOfNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+        function addFive() {
+            const newArr = [];
+            for (let i = 0; i < arrayOfNum.length; i++) {
+                newArr.push(arrayOfNum[i] + 5);
+            }
+            console.log(newArr);
+            document.getElementById("showAnswer").innerHTML = newArr
+        }
+
+        function subtractFive() {
+            const newArr = [];
+            for (let i = 0; i < arrayOfNum.length; i++) {
+                newArr.push(arrayOfNum[i] - 5);
+            }
+            console.log(newArr);
+            document.getElementById("showAnswer").innerHTML = newArr
+        }
+
+        function multiplyFive() {
+            const newArr = [];
+            for (let i = 0; i < arrayOfNum.length; i++) {
+                newArr.push(arrayOfNum[i] * 5);
+            }
+            console.log(newArr);
+            document.getElementById("showAnswer").innerHTML = newArr
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+
+</html>
