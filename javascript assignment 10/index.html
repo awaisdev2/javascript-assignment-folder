@@ -22,13 +22,13 @@
         type="text" placeholder="Enter a warranty you want" id="pcWarranty" />
       <input style="width: 600px; border: 2px solid grey" class="d-block text-light my-4 rounded-2 p-2 bg-transparent"
         type="text" placeholder="Enter the PC model" id="pcModel" />
-      <textarea style="width: 600px" class="border-2 d-block text-light my-4 bg-transparent rounded-2 p-2" ype="text"
+      <textarea style="width: 600px" class="border-2 d-block text-light my-4 bg-transparent rounded-2 p-2"
         placeholder="Enter Specifications" rows="8" id="pcDesc"></textarea>
     </div>
     <div>
       <input style="width: 400px; border: 2px solid grey" class="d-block text-light rounded-2 p-2 bg-transparent"
         type="text" oninput="searchPc()" placeholder="Search" id="searchPc" />
-      <div id="showInput" class="text-light mx-2"></div>
+      <!-- <div id="pcsList" class="text-light mx-2"></div> -->
       <div class="lorem overflow-scroll">
         <span id="pcsList" class="text-light mx-2"></span>
       </div>
@@ -39,7 +39,21 @@
   </div>
   <script>
     let pcs = [];
-    let newPc = {}
+    let newPc = {};
+    let isEdit = false;
+    let editPcObj = {};
+
+    for (let i = 1; i <= 10; i++) {
+      let pc = {
+          name: 'brand' + i,
+          warranty: Math.floor(Math.random() * 5 + 1) + ' years',
+          model: 'Model' + i,
+          description: 'Description for PC ' + i,
+      };
+      pcs.push(pc);
+    }
+    showInfo(pcs);
+
 function onSubmit() {
   const pcName = document.getElementById("pcName").value;
   const pcWarranty = document.getElementById("pcWarranty").value;
@@ -47,43 +61,55 @@ function onSubmit() {
   const pcDesc = document.getElementById("pcDesc").value;
 
   if(pcName === '' || pcWarranty === '' || pcModel === '' || pcDesc === '' ){
-    return document.getElementById('showInput').innerHTML = 'Please fill the empty fields'
+    return document.getElementById('pcsList').innerHTML = 'Please fill the empty fields'
   }
   if(pcName.length < 2 || pcWarranty.length < 2 || pcModel.length < 2 || pcDesc.length < 10){
-    return document.getElementById('showInput').innerHTML = 'Each field must require atleast 2 characters but specifictions must be 10 characters long'
+    return document.getElementById('pcsList').innerHTML = 'Each field must require atleast 2 characters but specifictions must be 10 characters long'
   }
   else{
       const data = [pcName, pcWarranty, pcModel, pcDesc];
-      document.getElementById("showInput").innerHTML = data;
+      document.getElementById("pcsList").innerHTML = data;
   }
   newPc = {
-    name: pcName,
-    warranty: pcWarranty,
-    model: pcModel,
-    description: pcDesc,
-   }
+      name: pcName,
+      warranty: pcWarranty,
+      model: pcModel,
+      description: pcDesc,
+  }
+  if (isEdit) {
+  const index = pcs.findIndex((item) => item.name === editPcObj.name);
+  if (index !== -1) {
+    pcs[index] = newPc;
+  }
+  isEdit = false;
+} 
+  else{
+
   pcs.push(newPc)
-  showInfo(pcs)
+}
+showInfo(pcs)
   clearPc()
+  console.log('$$123')
+// console.log(editPcObj)
 }
 function clearPc(){
-  document.getElementById("pcName").value = "";
+    document.getElementById("pcName").value = "";
     document.getElementById("pcWarranty").value = "";
     document.getElementById("pcModel").value = "";
     document.getElementById("pcDesc").value = "";
   }
 function showInfo(pcsList) {
-  console.log(pcsList);
-  document.getElementById("showInput").innerHTML = "";
+  // console.log(pcsList);
+  document.getElementById("pcsList").innerHTML = "";
   let pcList = "";
   window.pcs = pcsList;
-  pcsList.forEach((pc) => {
+  pcsList.forEach((pc, index) => {
     pcList = pcList + '<h1>' + pc.name + '</h1>';
     pcList = pcList + "<p>" + pc.warranty + "</p>";
     pcList = pcList + "<p>" + pc.model + "</p>";
     pcList = pcList + "<p>" + pc.description + "</p>";
-    pcList = pcList + '<button onclick="editPc()" class="btn m-3 btn-info">Edit</button>';
-    pcList = pcList + '<button onclick="deletePc()" class="btn m-3 btn-danger">Delete</button>';
+    pcList = pcList + `<button onclick="editPc('${pc.name}', '${pc.warranty}', '${pc.model}', '${pc.description}')" class="btn m-3 btn-info">Edit</button>`;
+    pcList = pcList + `<button onclick="deletePc(${index})" class="btn m-3 btn-danger">Delete</button>`;
   });
   document.getElementById("pcsList").innerHTML = pcList;
 }
@@ -91,13 +117,13 @@ function searchPc(){
   const searchInput = document.getElementById('searchPc').value;
   let pcList = '';
   const pcsList = pcs;
-pcsList.forEach((pc) => {
+pcsList.forEach((pc, index) => {
     pcList = pcList + '<h1>' + pc.name + '</h1>'
     pcList = pcList + "<p>" + pc.warranty + "</p>"
     pcList = pcList + "<p>" + pc.model + "</p>"
     pcList = pcList + "<p>" + pc.description + "</p>"
-    pcList = pcList + '<button onclick="editPc()" class="btn m-3 btn-info">Edit</button>';
-    pcList = pcList + '<button onclick="deletePc()" class="btn m-3 btn-danger">Delete</button>';
+    pcList = pcList + `<button onclick="editPc('${pc.name}', '${pc.warranty}', '${pc.model}', '${pc.description}')" class="btn m-3 btn-info">Edit</button>`;
+    pcList = pcList + `<button onclick="deletePc(${index})" class="btn m-3 btn-danger">Delete</button>`;
 });
 const filterPcs = pcs.filter((item)=>{
   return item.name == searchInput
@@ -112,12 +138,18 @@ function deletePc(i) {
   pcs.splice(i, 1);
   showInfo(pcs);
 }
-function editPc() {
-  document.getElementById('pcName').value = newPc.name
-  document.getElementById('pcWarranty').value = newPc.warranty
-  document.getElementById('pcModel').value = newPc.model
-  document.getElementById('pcDesc').value = newPc.description
-  document.getElementById('submitBtn').innerHTML = 'Update'
+function editPc(pcName, pcWarranty, pcModel, pcDesc) {
+  document.getElementById('pcName').value = pcName
+  document.getElementById('pcWarranty').value = pcWarranty
+  document.getElementById('pcModel').value = pcModel
+  document.getElementById('pcDesc').value = pcDesc
+  isEdit = true;
+  editPcObj = {
+    name: pcName,
+    warranty: pcWarranty,
+    model: pcModel,
+    description: pcDesc
+  }
 }
 
   </script>
